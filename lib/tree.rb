@@ -11,14 +11,14 @@ class Tree
     @root = build_tree(data)
   end
 
-  def build_tree(array)
-    return nil if array.empty?
+  def build_tree(array, start_index = 0, end_index = array.size - 1)
+    return nil if start_index > end_index
 
-    middle = (array.size - 1) / 2
+    middle = (start_index + end_index) / 2
     root_node = Node.new(array[middle])
 
-    root_node.left = build_tree(array[0..middle])
-    root_node.right = build_tree(array[(middle + 1)..])
+    root_node.left = build_tree(array, start_index, middle - 1)
+    root_node.right = build_tree(array, middle + 1, end_index)
 
     root_node
   end
@@ -54,8 +54,8 @@ class Tree
   end
 
   def pretty_print(node = @root, prefix = '', is_left: true)
-    pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
+    pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", is_left: false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
-    pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
+    pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", is_left: true) if node.left
   end
 end
